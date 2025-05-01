@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { CheckCircle, RotateCcw, Star, Info } from 'lucide-react';
 import Confetti from 'react-confetti';
-import { useWindowSize } from '@/hooks/use-window-size'; // Assuming a hook for window size
+import { useWindowSize } from '@/hooks/use-window-size';
 
 type Tile = number | null;
 type Grid = Tile[][];
@@ -215,7 +215,7 @@ const PuzzleGame: React.FC = () => {
         </div>
          <CardDescription className="text-sm text-muted-foreground mt-3 px-2 flex items-start gap-2">
              <Info className="h-4 w-4 mt-0.5 shrink-0 text-accent"/>
-             <span>Click a tile next to the empty space to slide it. Arrange the tiles in numerical order to win!</span>
+             <span>Click a tile next to the empty space to slide it. Arrange the tiles in numerical order from top-left to bottom-right to win!</span>
          </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center gap-4 pt-4">
@@ -226,14 +226,15 @@ const PuzzleGame: React.FC = () => {
              exit={{ opacity: 0 }}
              className="w-full"
           >
-            <Alert variant="default" className="bg-accent/10 border-accent text-accent-foreground">
-              <CheckCircle className="h-5 w-5 text-accent" />
+            {/* Use accent background and its corresponding foreground for better contrast */}
+            <Alert variant="default" className="bg-accent border-accent text-accent-foreground">
+              <CheckCircle className="h-5 w-5 text-accent-foreground" /> {/* Ensure icon matches text color */}
               <AlertTitle className="font-bold">Congratulations!</AlertTitle>
               <AlertDescription>
                 You solved Level {level} in {moves} moves and {formatTime(elapsedTime)}!
               </AlertDescription>
-              <Button onClick={nextLevel} className="mt-4 w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                Next Level {level + 1}
+              <Button onClick={nextLevel} className="mt-4 w-full bg-accent-foreground text-accent hover:bg-accent-foreground/90">
+                 Next Level {level + 1}
               </Button>
             </Alert>
           </motion.div>
@@ -267,7 +268,7 @@ const PuzzleGame: React.FC = () => {
                      ${
                        isEmpty
                          ? 'bg-secondary cursor-default' // Style for the empty space (uses secondary background)
-                         : 'bg-card text-card-foreground shadow cursor-pointer hover:bg-primary/10' // Style for numbered tiles (uses card background and foreground)
+                         : 'bg-card text-card-foreground shadow cursor-pointer hover:bg-primary/10 active:bg-primary/20' // Style for numbered tiles (uses card background and foreground)
                      }`}
                    onClick={() => handleTileClick(rowIndex, colIndex)}
                    aria-label={isEmpty ? "Empty tile" : `Tile ${tile}`}
