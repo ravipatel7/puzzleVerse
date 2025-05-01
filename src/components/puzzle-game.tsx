@@ -195,7 +195,7 @@ const PuzzleGame: React.FC = () => {
 
   return (
     // Apply glassmorphism styles to the card
-    <Card className="w-full max-w-md shadow-xl bg-card/80 dark:bg-card/70 backdrop-blur border border-white/20 dark:border-white/10 text-card-foreground overflow-hidden">
+    <Card className="w-full max-w-md shadow-xl bg-card/80 dark:bg-card/70 backdrop-blur border text-card-foreground overflow-hidden"> {/* Use border (inherits from CSS var) */}
        <AnimatePresence>
         {isWin && width && height && (
            <Confetti
@@ -243,7 +243,7 @@ const PuzzleGame: React.FC = () => {
 
         {/* Grid background adjusted for glassmorphism */}
         <div
-          className="grid gap-1 bg-secondary/70 dark:bg-secondary/60 p-2 rounded-md shadow-inner backdrop-blur-sm border border-white/10 dark:border-white/5"
+          className="grid gap-1 bg-secondary/70 dark:bg-secondary/60 p-2 rounded-md shadow-inner backdrop-blur-sm border" // Use border (inherits from CSS var)
           style={{
             gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
             aspectRatio: '1 / 1', // Maintain square aspect ratio
@@ -269,7 +269,7 @@ const PuzzleGame: React.FC = () => {
                      ${
                        isEmpty
                          ? 'bg-transparent cursor-default' // Empty space becomes transparent
-                         : 'bg-card/90 dark:bg-card/80 text-card-foreground shadow cursor-pointer hover:bg-primary/20 active:bg-primary/30 border border-white/10 dark:border-white/5' // Tiles with subtle glass effect
+                         : 'bg-card/90 dark:bg-card/80 text-card-foreground shadow cursor-pointer hover:bg-primary/20 active:bg-primary/30 border' // Use border (inherits from CSS var)
                      }`}
                    onClick={() => handleTileClick(rowIndex, colIndex)}
                    aria-label={isEmpty ? "Empty tile" : `Tile ${tile}`}
@@ -288,7 +288,7 @@ const PuzzleGame: React.FC = () => {
              onClick={() => resetPuzzle(gridSize, 20 + (level - 1) * 10 + (gridSize - 3) * 15)}
              disabled={isWin}
              // Apply subtle glass effect to buttons too
-             className="flex items-center gap-2 bg-background/70 dark:bg-background/60 backdrop-blur-sm border border-white/10 dark:border-white/5 hover:bg-accent/80 hover:text-accent-foreground"
+             className="flex items-center gap-2 bg-background/70 dark:bg-background/60 backdrop-blur-sm border hover:bg-accent/80 hover:text-accent-foreground" // Use border (inherits from CSS var)
            >
              <RotateCcw className="h-4 w-4" />
              Reset Puzzle
