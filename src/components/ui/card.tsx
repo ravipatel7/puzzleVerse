@@ -9,8 +9,10 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      // Removed default bg-card, text-card-foreground, shadow-sm. These will be added with glassmorphism styles.
-      "rounded-lg border", // Keep border for the glass edge effect
+      // Removed default bg-card, text-card-foreground, shadow-sm, and border.
+      // Background, text, and shadow will be applied via specific classes or theme.
+      // Border is removed as per user request.
+      "rounded-lg", // Keep rounded corners
       className
     )}
     {...props}

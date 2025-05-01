@@ -194,8 +194,8 @@ const PuzzleGame: React.FC = () => {
   };
 
   return (
-    // Apply glassmorphism styles to the card
-    <Card className="w-full max-w-md shadow-xl bg-card/80 dark:bg-card/70 backdrop-blur border text-card-foreground overflow-hidden"> {/* Use border (inherits from CSS var) */}
+    // Apply glassmorphism styles to the card, remove border, enhance shadow
+    <Card className="w-full max-w-md shadow-xl bg-card/80 dark:bg-card/70 backdrop-blur-lg text-card-foreground overflow-hidden"> {/* Enhanced backdrop blur, removed border */}
        <AnimatePresence>
         {isWin && width && height && (
            <Confetti
@@ -227,23 +227,23 @@ const PuzzleGame: React.FC = () => {
              exit={{ opacity: 0 }}
              className="w-full"
           >
-            {/* Adjusted Alert styling for glassmorphism context */}
-            <Alert variant="default" className="bg-accent/90 border-accent text-accent-foreground backdrop-blur-sm">
+            {/* Adjusted Alert styling, remove border */}
+            <Alert variant="default" className="bg-accent/90 text-accent-foreground backdrop-blur-sm shadow-md">
               <CheckCircle className="h-5 w-5 text-accent-foreground" /> {/* Ensure icon matches text color */}
               <AlertTitle className="font-bold">Congratulations!</AlertTitle>
               <AlertDescription>
                 You solved Level {level} in {moves} moves and {formatTime(elapsedTime)}!
               </AlertDescription>
-              <Button onClick={nextLevel} className="mt-4 w-full bg-accent-foreground text-accent hover:bg-accent-foreground/90">
+              <Button onClick={nextLevel} className="mt-4 w-full bg-accent-foreground text-accent hover:bg-accent-foreground/90 shadow">
                  Next Level {level + 1}
               </Button>
             </Alert>
           </motion.div>
         )}
 
-        {/* Grid background adjusted for glassmorphism */}
+        {/* Grid background adjusted for glassmorphism, remove border */}
         <div
-          className="grid gap-1 bg-secondary/70 dark:bg-secondary/60 p-2 rounded-md shadow-inner backdrop-blur-sm border" // Use border (inherits from CSS var)
+          className="grid gap-1 bg-secondary/70 dark:bg-secondary/60 p-2 rounded-md shadow-inner backdrop-blur-md" // Removed border, increased blur
           style={{
             gridTemplateColumns: `repeat(${gridSize}, minmax(0, 1fr))`,
             aspectRatio: '1 / 1', // Maintain square aspect ratio
@@ -269,7 +269,7 @@ const PuzzleGame: React.FC = () => {
                      ${
                        isEmpty
                          ? 'bg-transparent cursor-default' // Empty space becomes transparent
-                         : 'bg-card/90 dark:bg-card/80 text-card-foreground shadow cursor-pointer hover:bg-primary/20 active:bg-primary/30 border' // Use border (inherits from CSS var)
+                         : 'bg-card/90 dark:bg-card/80 text-card-foreground shadow-md cursor-pointer hover:bg-primary/20 active:bg-primary/30' // Removed border, added shadow-md
                      }`}
                    onClick={() => handleTileClick(rowIndex, colIndex)}
                    aria-label={isEmpty ? "Empty tile" : `Tile ${tile}`}
@@ -287,8 +287,8 @@ const PuzzleGame: React.FC = () => {
              variant="outline"
              onClick={() => resetPuzzle(gridSize, 20 + (level - 1) * 10 + (gridSize - 3) * 15)}
              disabled={isWin}
-             // Apply subtle glass effect to buttons too
-             className="flex items-center gap-2 bg-background/70 dark:bg-background/60 backdrop-blur-sm border hover:bg-accent/80 hover:text-accent-foreground" // Use border (inherits from CSS var)
+             // Apply subtle glass effect to buttons too, remove border, add shadow
+             className="flex items-center gap-2 bg-background/70 dark:bg-background/60 backdrop-blur-sm hover:bg-accent/80 hover:text-accent-foreground shadow" // Removed border, added shadow
            >
              <RotateCcw className="h-4 w-4" />
              Reset Puzzle

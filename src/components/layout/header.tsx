@@ -4,8 +4,8 @@ import ThemeToggle from '@/components/theme-toggle'; // Import the new ThemeTogg
 
 const Header: React.FC = () => {
   return (
-    // Apply glassmorphism: backdrop blur, semi-transparent background, border
-    <header className="sticky top-0 z-50 w-full backdrop-blur bg-primary/80 dark:bg-primary/70 text-primary-foreground shadow-md border-b border-border"> {/* Use CSS variable for border */}
+    // Apply glassmorphism: backdrop blur, semi-transparent background, remove border, keep shadow
+    <header className="sticky top-0 z-50 w-full backdrop-blur-lg bg-primary/70 dark:bg-primary/60 text-primary-foreground shadow-md"> {/* Removed border-b border-border */}
       <div className="container mx-auto px-4 flex items-center justify-between h-16"> {/* Standard height */}
         <div className="flex items-center">
            <Puzzle className="h-8 w-8 mr-2" />
