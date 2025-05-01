@@ -421,7 +421,7 @@ const PuzzleGame: React.FC = () => {
                      ${
                        isEmpty
                          ? 'bg-transparent cursor-default opacity-50' // Make empty space slightly transparent
-                         : 'bg-card/90 dark:bg-card/80 text-card-foreground shadow-md cursor-pointer hover:bg-primary/20 active:bg-primary/30'
+                         : 'bg-card/90 dark:bg-card/85 text-card-foreground shadow-md cursor-pointer hover:bg-primary/20 dark:hover:bg-primary/30 active:bg-primary/30 dark:active:bg-primary/40' // Increased dark opacity, added dark hover/active states
                      }`}
                    onClick={() => handleTileClick(rowIndex, colIndex)}
                    aria-label={isEmpty ? "Empty tile" : `Tile ${tile}`}
@@ -469,4 +469,3 @@ const PuzzleGame: React.FC = () => {
 };
 
 export default PuzzleGame;
-    
