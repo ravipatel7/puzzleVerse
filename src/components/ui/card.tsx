@@ -33,11 +33,11 @@ const CardHeader = React.forwardRef<
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<
-  HTMLDivElement, // Changed from HTMLParagraphElement to HTMLDivElement for consistency
-  React.HTMLAttributes<HTMLDivElement> // Changed from HTMLHeadingElement
+  HTMLHeadingElement, // Changed back to HTMLHeadingElement for semantics
+  React.HTMLAttributes<HTMLHeadingElement> // Use HTMLAttributes for heading
 >(({ className, ...props }, ref) => (
-  // Ensure CardTitle uses <div> or appropriate heading tag if needed semantically
-  <div // Using div, but consider h2 or h3 if appropriate for structure
+  // Use h2 by default, can be overridden with `as` prop if needed
+  <h2
     ref={ref}
     className={cn(
       "text-2xl font-semibold leading-none tracking-tight", // Adjusted text size/weight if necessary
@@ -50,10 +50,11 @@ CardTitle.displayName = "CardTitle"
 
 
 const CardDescription = React.forwardRef<
-  HTMLDivElement, // Changed from HTMLParagraphElement to HTMLDivElement for consistency
-  React.HTMLAttributes<HTMLDivElement> // Changed from HTMLParagraphElement
+  HTMLParagraphElement, // Changed back to HTMLParagraphElement for semantics
+  React.HTMLAttributes<HTMLParagraphElement> // Use HTMLAttributes for paragraph
 >(({ className, ...props }, ref) => (
-  <div // Using div, consider <p> if always paragraph content
+  // Use <p> element
+  <p
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props} // Spread props correctly
@@ -83,3 +84,4 @@ const CardFooter = React.forwardRef<
 CardFooter.displayName = "CardFooter"
 
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+    
