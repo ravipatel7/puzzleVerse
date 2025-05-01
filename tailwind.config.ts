@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config = {
     darkMode: ["class"],
     content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,6 +9,7 @@ export default {
   ],
   theme: {
   	extend: {
+       // gridTemplateColumns definitions removed - use default Tailwind classes or inline styles
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -91,4 +92,12 @@ export default {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+  safelist: [
+     // Using inline styles with `repeat(${gridSize}, ...)` avoids the need for safelisting here.
+    // {
+    //   pattern: /grid-cols-(3|4|5|6)/,
+    // },
+  ],
 } satisfies Config;
+
+export default config;
