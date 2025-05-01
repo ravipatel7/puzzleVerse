@@ -23,20 +23,23 @@ const ThemeToggle: React.FC = () => {
 
   // Avoid rendering the switch until the component is mounted
   if (!isMounted) {
-    // You can render a placeholder or null during server-side rendering & hydration
-     return <div className="h-6 w-[70px]"></div>; // Placeholder with similar size
+    // Render a placeholder or null during server-side rendering & hydration
+     return <div className="h-7 w-[70px]"></div>; // Placeholder with similar size
   }
 
   return (
-    <div className="flex items-center space-x-2">
-      <Sun className={`h-5 w-5 transition-colors ${theme === 'light' ? 'text-accent' : 'text-muted-foreground'}`} />
+    // Added padding, background, border, and rounded corners to the container for better visibility
+    <div className="flex items-center space-x-2 p-1 rounded-full bg-background/30 dark:bg-background/20 border border-border/20 backdrop-blur-sm shadow-sm">
+      <Sun className={`h-5 w-5 transition-colors ${theme === 'light' ? 'text-accent' : 'text-muted-foreground/80'}`} />
       <Switch
         id="theme-toggle"
         checked={theme === 'dark'}
         onCheckedChange={toggleTheme}
         aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        // Optional: Add classes directly to Switch if needed, though container styling might be enough
+        // className="bg-background/50 dark:bg-background/40 border border-border/30"
       />
-      <Moon className={`h-5 w-5 transition-colors ${theme === 'dark' ? 'text-accent' : 'text-muted-foreground'}`} />
+      <Moon className={`h-5 w-5 transition-colors ${theme === 'dark' ? 'text-accent' : 'text-muted-foreground/80'}`} />
        {/* Hidden label for accessibility */}
        <Label htmlFor="theme-toggle" className="sr-only">
          Toggle theme
