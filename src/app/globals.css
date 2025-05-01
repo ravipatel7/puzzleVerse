@@ -6,25 +6,57 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Add backdrop-filter utilities if not default */
+@layer utilities {
+  .backdrop-blur-sm { backdrop-filter: blur(4px); }
+  .backdrop-blur { backdrop-filter: blur(8px); }
+  .backdrop-blur-md { backdrop-filter: blur(12px); }
+  .backdrop-blur-lg { backdrop-filter: blur(16px); }
+  .backdrop-blur-xl { backdrop-filter: blur(24px); }
+  .backdrop-blur-2xl { backdrop-filter: blur(40px); }
+  .backdrop-blur-3xl { backdrop-filter: blur(64px); }
+}
+
+
 @layer base {
   :root {
     --background: 210 40% 98%; /* Very light cool gray */
     --foreground: 222.2 47.4% 11.2%; /* Default Dark */
-    --card: 0 0% 100%; /* White */
+
+    /* Glassmorphism adjustments */
+    --card-bg-light: 255 255 255; /* White base for light mode card */
+    --card-bg-dark: 30 30 30; /* Dark base for dark mode card */
+    --card-alpha: 0.6; /* Transparency level for cards */
+    --card-blur: 8px; /* Blur intensity */
+    --card-border-light: 255 255 255; /* Light border for light mode */
+    --card-border-dark: 255 255 255; /* Light border for dark mode too (contrast) */
+    --card-border-alpha: 0.2; /* Border transparency */
+
+
+    --card: 0 0% 100%; /* White - Will be overridden with RGBA below */
     --card-foreground: 222.2 47.4% 11.2%; /* Default Dark */
-    --popover: 0 0% 100%; /* White */
+    --popover: 0 0% 100%; /* White - Will be overridden with RGBA below */
     --popover-foreground: 222.2 47.4% 11.2%; /* Default Dark */
+
     --primary: 262.1 83.3% 57.8%; /* Vibrant Violet */
-    --primary-foreground: 210 40% 98%; /* Light Gray (Matches background) */
-    --secondary: 210 40% 96.1%; /* Slightly darker cool gray */
+    --primary-foreground: 210 40% 98%; /* Light Gray */
+
+    --secondary-bg-light: 240 240 240; /* Light gray base for light */
+    --secondary-bg-dark: 50 50 50; /* Dark gray base for dark */
+    --secondary-alpha: 0.5;
+    --secondary-blur: 4px;
+
+    --secondary: 210 40% 96.1%; /* Slightly darker cool gray - Will be overridden */
     --secondary-foreground: 222.2 47.4% 11.2%; /* Default Dark */
+
     --muted: 210 40% 96.1%; /* Slightly darker cool gray */
     --muted-foreground: 215.4 16.3% 46.9%; /* Default Muted */
     --accent: 142.1 70.6% 45.3%; /* Strong Green */
-    --accent-foreground: 210 40% 98%; /* Light Gray (Matches background) */
+    --accent-foreground: 210 40% 98%; /* Light Gray */
     --destructive: 0 84.2% 60.2%; /* Default Destructive */
     --destructive-foreground: 210 40% 98%; /* Light Gray */
-    --border: 214.3 31.8% 91.4%; /* Light gray border */
+
+    --border: 214.3 31.8% 91.4%; /* Light gray border - Will be overridden */
     --input: 214.3 31.8% 91.4%; /* Light gray border */
     --ring: 262.1 83.3% 57.8%; /* Primary Violet for focus rings */
     --chart-1: 12 76% 61%;
@@ -33,57 +65,77 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 210 40% 96.1%; /* Same as secondary */
+
+    /* Glassmorphism Overrides */
+    --card: rgba(var(--card-bg-light), var(--card-alpha));
+    --popover: rgba(var(--card-bg-light), var(--card-alpha));
+    --secondary: rgba(var(--secondary-bg-light), var(--secondary-alpha));
+    --border: rgba(var(--card-border-light), var(--card-border-alpha));
+    --input: rgba(var(--card-border-light), var(--card-border-alpha));
+
+    /* Sidebar remains less transparent for readability */
+    --sidebar-background: 210 40% 96.1%;
     --sidebar-foreground: 222.2 47.4% 11.2%;
-    --sidebar-primary: 262.1 83.3% 57.8%; /* Primary */
+    --sidebar-primary: 262.1 83.3% 57.8%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 210 40% 93%; /* Slightly darker accent */
+    --sidebar-accent: 210 40% 93%;
     --sidebar-accent-foreground: 222.2 47.4% 11.2%;
-    --sidebar-border: 214.3 31.8% 88%; /* Slightly darker border */
+    --sidebar-border: 214.3 31.8% 88%;
     --sidebar-ring: 262.1 83.3% 57.8%;
   }
 
   .dark {
     --background: 222.2 47.4% 11.2%; /* Dark Blue/Gray */
     --foreground: 210 40% 98%; /* Light Gray */
-    --card: 222.2 47.4% 11.2%; /* Dark Blue/Gray */
+
+    /* Glassmorphism Overrides */
+    --card: rgba(var(--card-bg-dark), var(--card-alpha));
     --card-foreground: 210 40% 98%; /* Light Gray */
-    --popover: 222.2 47.4% 11.2%; /* Dark Blue/Gray */
+    --popover: rgba(var(--card-bg-dark), var(--card-alpha));
     --popover-foreground: 210 40% 98%; /* Light Gray */
+
     --primary: 262.1 83.3% 57.8%; /* Vibrant Violet */
     --primary-foreground: 210 40% 98%; /* Light Gray */
-    --secondary: 217.2 32.6% 17.5%; /* Darker Blue/Gray */
+
+    --secondary: rgba(var(--secondary-bg-dark), var(--secondary-alpha));
     --secondary-foreground: 210 40% 98%; /* Light Gray */
-    --muted: 217.2 32.6% 17.5%; /* Darker Blue/Gray */
+
+    --muted: rgba(var(--secondary-bg-dark), 0.7); /* Slightly less transparent muted */
     --muted-foreground: 215 20.2% 65.1%; /* Default Dark Muted */
     --accent: 142.1 70.6% 45.3%; /* Strong Green */
     --accent-foreground: 210 40% 98%; /* Light Gray */
     --destructive: 0 62.8% 30.6%; /* Default Dark Destructive */
     --destructive-foreground: 210 40% 98%; /* Light Gray */
-    --border: 217.2 32.6% 17.5%; /* Darker Blue/Gray */
-    --input: 217.2 32.6% 17.5%; /* Darker Blue/Gray */
+
+    --border: rgba(var(--card-border-dark), var(--card-border-alpha));
+    --input: rgba(var(--card-border-dark), var(--card-border-alpha));
     --ring: 262.1 83.3% 57.8%; /* Primary Violet */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 222.2 47.4% 11.2%; /* Same as main background */
+
+    /* Sidebar remains less transparent */
+    --sidebar-background: 217.2 32.6% 17.5%; /* Darker Blue/Gray */
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 262.1 83.3% 57.8%; /* Primary */
+    --sidebar-primary: 262.1 83.3% 57.8%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 217.2 32.6% 17.5%; /* Same as secondary */
+    --sidebar-accent: 217.2 32.6% 22%; /* Slightly lighter accent */
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%; /* Same as border */
+    --sidebar-border: 217.2 32.6% 25%; /* Lighter border */
     --sidebar-ring: 262.1 83.3% 57.8%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border; /* Use the potentially transparent border */
   }
   body {
-    @apply bg-background text-foreground;
+     /* Apply a subtle gradient or image background to make glassmorphism more apparent */
+    @apply bg-gradient-to-br from-violet-100 via-blue-50 to-fuchsia-100 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900 text-foreground;
+    /* Ensure min height for gradient visibility */
+    min-height: 100vh;
   }
 }

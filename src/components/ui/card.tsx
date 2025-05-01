@@ -9,7 +9,8 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      // Removed default bg-card, text-card-foreground, shadow-sm. These will be added with glassmorphism styles.
+      "rounded-lg border", // Keep border for the glass edge effect
       className
     )}
     {...props}
@@ -30,31 +31,34 @@ const CardHeader = React.forwardRef<
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLDivElement, // Changed from HTMLParagraphElement to HTMLDivElement for consistency
+  React.HTMLAttributes<HTMLDivElement> // Changed from HTMLHeadingElement
 >(({ className, ...props }, ref) => (
-  <div
+  // Ensure CardTitle uses <div> or appropriate heading tag if needed semantically
+  <div // Using div, but consider h2 or h3 if appropriate for structure
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-2xl font-semibold leading-none tracking-tight", // Adjusted text size/weight if necessary
       className
     )}
-    {...props}
+    {...props} // Spread props correctly
   />
 ))
 CardTitle.displayName = "CardTitle"
 
+
 const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLDivElement, // Changed from HTMLParagraphElement to HTMLDivElement for consistency
+  React.HTMLAttributes<HTMLDivElement> // Changed from HTMLParagraphElement
 >(({ className, ...props }, ref) => (
-  <div
+  <div // Using div, consider <p> if always paragraph content
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
-    {...props}
+    {...props} // Spread props correctly
   />
 ))
 CardDescription.displayName = "CardDescription"
+
 
 const CardContent = React.forwardRef<
   HTMLDivElement,
