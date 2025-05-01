@@ -24,8 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}>
+    // The 'light' or 'dark' class will be added dynamically to <html> by useTheme hook
+    <html lang="en" className="light"> {/* Start with default light, hook will adjust */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> {/* Removed bg-background */}
         {children}
         <Toaster /> {/* Add Toaster */}
       </body>
