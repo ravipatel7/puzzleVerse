@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle, RotateCcw, Star } from 'lucide-react';
+import { CheckCircle, RotateCcw, Star, Info } from 'lucide-react';
 import Confetti from 'react-confetti';
 import { useWindowSize } from '@/hooks/use-window-size'; // Assuming a hook for window size
 
@@ -47,6 +47,8 @@ const shuffleGrid = (grid: Grid, moves: number): Grid => {
       return nr >= 0 && nr < size && nc >= 0 && nc < size;
     });
 
+    if (validMoves.length === 0) continue; // Should not happen in a > 1x1 grid
+
     const [moveDr, moveDc] = validMoves[Math.floor(Math.random() * validMoves.length)];
     const targetRow = emptyRow + moveDr;
     const targetCol = emptyCol + moveDc;
@@ -61,9 +63,9 @@ const shuffleGrid = (grid: Grid, moves: number): Grid => {
    // Ensure it's solvable (not implemented fully here, just basic shuffling)
    // A more robust shuffle would check solvability.
    // For simplicity, we assume the shuffle creates a solvable state.
-   // If the empty tile ends up back at the start, shuffle again slightly
-   if (emptyRow === size - 1 && emptyCol === size - 1) {
-     return shuffleGrid(grid, moves + 1); // Recursive call for slightly more shuffling
+   // If the empty tile ends up back at the start after minimal shuffles, shuffle again slightly
+   if (emptyRow === size - 1 && emptyCol === size - 1 && moves < size * size) {
+     return shuffleGrid(grid, moves + 5); // Recursive call for more shuffling
    }
 
 
@@ -94,6 +96,7 @@ const findEmptyTile = (grid: Grid): [number, number] => {
       }
     }
   }
+  console.error("Empty tile not found in grid:", grid); // Log error if empty tile is missing
   return [-1, -1]; // Should not happen in a valid grid
 };
 
@@ -118,8 +121,9 @@ const PuzzleGame: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Initialize puzzle on mount
-    resetPuzzle(gridSize, 20 + (level - 1) * 10); // Increase shuffle moves with level
+    // Initialize puzzle on mount or when level/gridSize changes
+    const initialShuffleMoves = 20 + (level - 1) * 10 + (gridSize - 3) * 15; // Increase shuffle moves with level and grid size
+    resetPuzzle(gridSize, initialShuffleMoves);
   }, [level, gridSize, resetPuzzle]); // Depend on level and gridSize
 
    // Timer effect
@@ -142,6 +146,8 @@ const PuzzleGame: React.FC = () => {
     if (isWin || grid[rowIndex][colIndex] === null) return; // Ignore clicks on empty or if won
 
     const [emptyRow, emptyCol] = findEmptyTile(grid);
+    if (emptyRow === -1) return; // Exit if empty tile wasn't found (error state)
+
 
     // Check if the clicked tile is adjacent to the empty tile
     const isAdjacent =
@@ -173,7 +179,7 @@ const PuzzleGame: React.FC = () => {
     const nextLevelNum = level + 1;
     let nextGridSize = gridSize;
     // Increase grid size every 3 levels (adjust as needed)
-    if (nextLevelNum % 3 === 1 && nextLevelNum > 1) {
+    if (nextLevelNum > 1 && nextLevelNum % 3 === 1) {
        nextGridSize = Math.min(gridSize + 1, 6); // Cap grid size at 6x6 for now
     }
     setLevel(nextLevelNum);
@@ -188,7 +194,7 @@ const PuzzleGame: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-md shadow-xl">
+    <Card className="w-full max-w-md shadow-xl bg-card text-card-foreground">
        <AnimatePresence>
         {isWin && width && height && (
            <Confetti
@@ -199,16 +205,20 @@ const PuzzleGame: React.FC = () => {
            />
         )}
       </AnimatePresence>
-      <CardHeader className="text-center">
+      <CardHeader className="text-center pb-2">
         <CardTitle className="text-2xl font-bold text-primary flex items-center justify-center gap-2">
-           <Star className="text-accent"/> Level {level}
+           <Star className="text-accent"/> Level {level} <span className="text-lg font-normal text-muted-foreground">({gridSize}x{gridSize})</span>
         </CardTitle>
-         <div className="text-sm text-muted-foreground flex justify-center gap-4 mt-2">
+         <div className="text-sm text-muted-foreground flex justify-center gap-4 mt-1">
             <span>Moves: {moves}</span>
             <span>Time: {formatTime(elapsedTime)}</span>
         </div>
+         <CardDescription className="text-sm text-muted-foreground mt-3 px-2 flex items-start gap-2">
+             <Info className="h-4 w-4 mt-0.5 shrink-0 text-accent"/>
+             <span>Click a tile next to the empty space to slide it. Arrange the tiles in numerical order to win!</span>
+         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col items-center gap-4">
+      <CardContent className="flex flex-col items-center gap-4 pt-4">
         {isWin && (
           <motion.div
              initial={{ opacity: 0, y: -20 }}
@@ -220,15 +230,16 @@ const PuzzleGame: React.FC = () => {
               <CheckCircle className="h-5 w-5 text-accent" />
               <AlertTitle className="font-bold">Congratulations!</AlertTitle>
               <AlertDescription>
-                You solved the puzzle in {moves} moves and {formatTime(elapsedTime)}!
+                You solved Level {level} in {moves} moves and {formatTime(elapsedTime)}!
               </AlertDescription>
-              <Button onClick={nextLevel} className="mt-4 w-full bg-accent hover:bg-accent/90">
-                Next Level
+              <Button onClick={nextLevel} className="mt-4 w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                Next Level {level + 1}
               </Button>
             </Alert>
           </motion.div>
         )}
 
+        {/* Ensure grid background respects theme */}
         <div
           className="grid gap-1 bg-secondary p-2 rounded-md shadow-inner"
           style={{
@@ -252,15 +263,16 @@ const PuzzleGame: React.FC = () => {
                    animate={{ scale: 1, opacity: 1 }}
                    exit={{ scale: 0.8, opacity: 0 }}
                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                   className={`flex items-center justify-center rounded font-bold text-lg select-none aspect-square
+                   className={`flex items-center justify-center rounded font-bold text-lg select-none aspect-square transition-colors duration-150
                      ${
                        isEmpty
-                         ? 'bg-secondary cursor-default' // Style for the empty space
-                         : 'bg-card text-card-foreground shadow cursor-pointer hover:bg-primary/10 transition-colors duration-150'
+                         ? 'bg-secondary cursor-default' // Style for the empty space (uses secondary background)
+                         : 'bg-card text-card-foreground shadow cursor-pointer hover:bg-primary/10' // Style for numbered tiles (uses card background and foreground)
                      }`}
                    onClick={() => handleTileClick(rowIndex, colIndex)}
                    aria-label={isEmpty ? "Empty tile" : `Tile ${tile}`}
                    role="button"
+                   tabIndex={isEmpty ? -1 : 0} // Make tiles focusable, but not the empty one
                  >
                     {!isEmpty ? tile : ''}
                  </motion.div>
@@ -271,7 +283,7 @@ const PuzzleGame: React.FC = () => {
 
          <Button
              variant="outline"
-             onClick={() => resetPuzzle(gridSize, 20 + (level - 1) * 10)}
+             onClick={() => resetPuzzle(gridSize, 20 + (level - 1) * 10 + (gridSize - 3) * 15)}
              disabled={isWin}
              className="flex items-center gap-2"
            >
